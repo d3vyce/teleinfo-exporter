@@ -5,7 +5,7 @@ on:
     types: [published]
 
 jobs:
-  build docker:
+  build-docker:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
