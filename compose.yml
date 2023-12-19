@@ -1,0 +1,8 @@
+services:
+  web:
+    image: teleinfo_exporter:latest
+    environment:
+      - BROKER_HOSTNAME=10.10.0.10
+    ports: 
+      - 8000:8000
+    restart: always

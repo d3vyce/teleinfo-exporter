@@ -1,0 +1,36 @@
+[project]
+name = "teleinfo-exporter"
+version = "1.0.0"
+dependencies = [
+  "bcrypt ~= 4.1",
+  "configargparse ~= 1.7",
+  "flask ~= 3.0",
+  "flask-httpauth ~= 4.8",
+  "paho-mqtt ~= 1.6",
+  "prometheus-client ~= 0.19",
+]
+requires-python = ">=3.8"
+authors = [
+  { name="d3vyce", email="contact@d3vyce.fr" },
+]
+description = "Simple prometheus exporter for Linky teleinfo."
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["teleinfo", "linky", "prometheus", "exporter"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/d3vyce/teleinfo-exporter"
+Repository = "https://github.com/d3vyce/teleinfo-exporter.git"
+Issues = "https://github.com/d3vyce/teleinfo-exporter/issues"
+Changelog = "https://github.com/d3vyce/teleinfo-exporter/blob/main/CHANGELOG.md"
+
+[project.scripts]
+teleinfo-exporter = "teleinfo_exporter.app:main"
+
+[tool.isort]
+profile = "black"

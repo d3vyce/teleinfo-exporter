@@ -1,0 +1,6 @@
+bcrypt~=4.1
+configargparse~=1.7
+flask~=3.0
+flask-httpauth~=4.8
+paho-mqtt~=1.6
+prometheus-client~=0.19

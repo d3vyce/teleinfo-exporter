@@ -1,0 +1,23 @@
+name: Python Lint
+on: push
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      run: |
+        apt update
+        apt install -y python3 python3-pip        
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pylint black isort        
+    - name: Lint code
+      run: |
+        find . -type f -name "*.py" | xargs pylint
+        find . -type f -name "*.py" | xargs black --check
+        find . -type f -name "*.py" | xargs isort --check
