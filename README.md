@@ -12,15 +12,11 @@ teleinfo-exporter --help
 ```
 
 ### Docker
-```
-docker pull teleinfo-exporter
-```
-
 Minimal Docker compose:
 ```yaml
 services:
   web:
-    image: teleinfo_exporter:latest
+    image: ghcr.io/d3vyce/teleinfo-exporter:latest
     environment:
       - BROKER_HOSTNAME=10.10.0.10
     ports: 
