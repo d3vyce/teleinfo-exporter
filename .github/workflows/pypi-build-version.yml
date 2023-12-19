@@ -12,7 +12,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install --yes python3-setuptools python3-build
+          sudo apt-get install --yes python3-setuptools python3-build python3-venv
       - name: Build
         run: |
           python3 -m build
