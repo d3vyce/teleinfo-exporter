@@ -155,7 +155,6 @@ def on_disconnect(client, userdata, rc):
             if not client.reconnect():
                 break
         except ConnectionRefusedError:
-            pass
             time.sleep(1)
 
 
@@ -174,6 +173,7 @@ def verify_password(username, password):
     ):
         return username
     return None
+
 
 @app.route("/metrics")
 def metrics():
