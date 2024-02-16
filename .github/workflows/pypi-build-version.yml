@@ -9,16 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.1
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
           python3 -m pip install --upgrade build
       - name: Build
         run: python3 -m build
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4.3.1
         with:
           path: ./dist
           name: dist
@@ -30,7 +30,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4.1.2
         with:
           path: ./dist
           name: dist
