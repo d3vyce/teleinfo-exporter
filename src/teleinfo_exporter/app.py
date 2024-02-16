@@ -3,6 +3,7 @@
 import json
 import random
 import string
+import time
 
 import bcrypt
 import configargparse
@@ -92,6 +93,7 @@ teleinfo_contract_type = Gauge("teleinfo_contract_type", "contract type", ["type
 
 
 def on_connect(client, userdata, flags, rc):  # pylint: disable=unused-argument
+    client.subscribe("teleinfo/tele/SENSOR")
     if rc == 0:
         print("Connected to broker")
     else:
@@ -146,6 +148,17 @@ def on_message(client, userdata, message):  # pylint: disable=unused-argument
         teleinfo_contract_type.labels(message["TIC"]["OPTARIF"]).set(0)
 
 
+def on_disconnect(client, userdata, rc):
+    print("Diconnected from broker, reconnecting...")
+    while True:
+        try:
+            if not client.reconnect():
+                break
+        except ConnectionRefusedError:
+            pass
+            time.sleep(1)
+
+
 @app.before_request
 @auth.login_required()
 def global_auth():
@@ -161,7 +174,6 @@ def verify_password(username, password):
     ):
         return username
     return None
-
 
 @app.route("/metrics")
 def metrics():
@@ -186,7 +198,6 @@ def main():
     p.add("--http_cert", help="HTTP Server Certificate", env_var="HTTP_CERT")
     p.add("--http_key", help="HTTP Server Key", env_var="HTTP_KEY")
     options = p.parse_args()
-    print(options)
 
     if options.auth_user and options.auth_hash:
         app.config["USERS"] = {options.auth_user: options.auth_hash.encode()}
@@ -198,12 +209,11 @@ def main():
     if options.broker_user and options.broker_password:
         client.username_pw_set(options.broker_user, password=options.broker_password)
 
+    client.connect(options.broker_host, port=options.broker_port)
     client.on_connect = on_connect
     client.on_message = on_message
-    client.connect(options.broker_host, port=options.broker_port)
+    client.on_disconnect = on_disconnect
     client.loop_start()
-
-    client.subscribe(options.broker_topic)
 
     if options.http_cert and options.http_key:
         ssl_context = (options.http_cert, options.http_key)
