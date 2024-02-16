@@ -1,8 +1,12 @@
 # Teleinfo Exporter
 
+![Grafana Dashboard](https://grafana.com/api/dashboards/20182/images/15332/image)
+
 Simple prometheus exporter for Linky teleinfo.
 Teleinfo Tasmota project :
 https://github.com/NicolasBernaerts/tasmota/tree/master/teleinfo
+Grafana Dashboard:
+https://grafana.com/grafana/dashboards/20182-linky-teleinfo/
 
 ## Installation
 ### Pip
