@@ -148,7 +148,7 @@ def on_message(client, userdata, message):  # pylint: disable=unused-argument
         teleinfo_contract_type.labels(message["TIC"]["OPTARIF"]).set(0)
 
 
-def on_disconnect(client, userdata, rc):
+def on_disconnect(client, userdata, rc):  # pylint: disable=unused-argument
     print("Diconnected from broker, reconnecting...")
     while True:
         try:
