@@ -149,7 +149,9 @@ def on_message(client, userdata, message):  # pylint: disable=unused-argument
         teleinfo_production_instant_apparent_power.set(
             message.get("PROD", {}).get("VA", 0)
         )
-        teleinfo_production_instant_active_power.set(message.get("PROD", {}).get("W", 0))
+        teleinfo_production_instant_active_power.set(
+            message.get("PROD", {}).get("W", 0)
+        )
         teleinfo_production_power_factor.set(message.get("PROD", {}).get("COS", 0))
     elif "TIC" in message:
         teleinfo_contract_number.labels(message.get("TIC", {}).get("ADCO", 0)).set(0)
