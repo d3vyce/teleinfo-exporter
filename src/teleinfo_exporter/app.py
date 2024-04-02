@@ -101,51 +101,59 @@ def on_connect(client, userdata, flags, rc):  # pylint: disable=unused-argument
 
 
 def on_message(client, userdata, message):  # pylint: disable=unused-argument
-    message = json.loads(message.payload.decode("utf-8"))
+    try:
+        message = json.loads(message.payload.decode("utf-8"))
+    except UnicodeDecodeError:
+        pass
+
     if "ENERGY" in message:
-        teleinfo_total.set(message["ENERGY"]["Total"])
-        teleinfo_yesterday.set(message["ENERGY"]["Yesterday"])
-        teleinfo_today.set(message["ENERGY"]["Today"])
-        teleinfo_power.set(message["ENERGY"]["Power"])
-        teleinfo_apparent_power.set(message["ENERGY"]["ApparentPower"])
-        teleinfo_reactive_power.set(message["ENERGY"]["ReactivePower"])
-        teleinfo_power_factor.set(message["ENERGY"]["Factor"])
-        teleinfo_voltage.set(message["ENERGY"]["Voltage"])
-        teleinfo_current.set(message["ENERGY"]["Current"])
+        teleinfo_total.set(message.get("ENERGY", {}).get("Total", 0))
+        teleinfo_yesterday.set(message.get("ENERGY", {}).get("Yesterday", 0))
+        teleinfo_today.set(message.get("ENERGY", {}).get("Today", 0))
+        teleinfo_power.set(message.get("ENERGY", {}).get("Power", 0))
+        teleinfo_apparent_power.set(message.get("ENERGY", {}).get("ApparentPower", 0))
+        teleinfo_reactive_power.set(message.get("ENERGY", {}).get("ReactivePower", 0))
+        teleinfo_power_factor.set(message.get("ENERGY", {}).get("Factor", 0))
+        teleinfo_voltage.set(message.get("ENERGY", {}).get("Voltage", 0))
+        teleinfo_current.set(message.get("ENERGY", {}).get("Current", 0))
     elif "METER" in message:
-        teleinfo_phases_count.set(message["METER"]["PH"])
-        teleinfo_max_current_per_phase.set(message["METER"]["ISUB"])
-        teleinfo_max_power_per_phase.set(message["METER"]["PSUB"])
-        teleinfo_max_power_per_phase_with_overload.set(message["METER"]["PMAX"])
-        teleinfo_total_apparent_power.set(message["METER"]["P"])
-        teleinfo_total_active_power.set(message["METER"]["W"])
-        teleinfo_total_current.set(message["METER"]["I"])
+        teleinfo_phases_count.set(message.get("METER", {}).get("PH", 0))
+        teleinfo_max_current_per_phase.set(message.get("METER", {}).get("ISUB", 0))
+        teleinfo_max_power_per_phase.set(message.get("METER", {}).get("PSUB", 0))
+        teleinfo_max_power_per_phase_with_overload.set(
+            message.get("METER", {}).get("PMAX", 0)
+        )
+        teleinfo_total_apparent_power.set(message.get("METER", {}).get("P", 0))
+        teleinfo_total_active_power.set(message.get("METER", {}).get("W", 0))
+        teleinfo_total_current.set(message.get("METER", {}).get("I", 0))
         for i in range(1, 4):
-            if not message["METER"].get(f"U{i}"):
+            if not message.get("METER", {}).get(f"U{i}"):
                 break
             teleinfo_instant_voltage_per_phase.labels(f"U{i}").set(
-                message["METER"][f"U{i}"]
+                message.get("METER", {}).get(f"U{i}", 0)
             )
             teleinfo_instant_apparent_power_per_phase.labels(f"P{i}").set(
-                message["METER"][f"P{i}"]
+                message.get("METER", {}).get(f"P{i}", 0)
             )
             teleinfo_instant_active_power_per_phase.labels(f"W{i}").set(
-                message["METER"][f"W{i}"]
+                message.get("METER", {}).get(f"W{i}", 0)
             )
             teleinfo_instant_current_per_phase.labels(f"I{i}").set(
-                message["METER"][f"I{i}"]
+                message.get("METER", {}).get(f"I{i}", 0)
             )
             teleinfo_power_factor_per_phase.labels(f"C{i}").set(
-                message["METER"][f"C{i}"]
+                message.get("METER", {}).get(f"C{i}", 0)
             )
 
     elif "PROD" in message:
-        teleinfo_production_instant_apparent_power.set(message["PROD"]["VA"])
-        teleinfo_production_instant_active_power.set(message["PROD"]["W"])
-        teleinfo_production_power_factor.set(message["PROD"]["COS"])
+        teleinfo_production_instant_apparent_power.set(
+            message.get("PROD", {}).get("VA", 0)
+        )
+        teleinfo_production_instant_active_power.set(message.get("PROD", {}).get("W", 0))
+        teleinfo_production_power_factor.set(message.get("PROD", {}).get("COS", 0))
     elif "TIC" in message:
-        teleinfo_contract_number.labels(message["TIC"]["ADCO"]).set(0)
-        teleinfo_contract_type.labels(message["TIC"]["OPTARIF"]).set(0)
+        teleinfo_contract_number.labels(message.get("TIC", {}).get("ADCO", 0)).set(0)
+        teleinfo_contract_type.labels(message.get("TIC", {}).get("OPTARIF", 0)).set(0)
 
 
 def on_disconnect(client, userdata, rc):  # pylint: disable=unused-argument
