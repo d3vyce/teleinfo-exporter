@@ -1,6 +1,6 @@
 [project]
 name = "teleinfo-exporter"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
   "bcrypt ~= 4.1",
   "configargparse ~= 1.7",
